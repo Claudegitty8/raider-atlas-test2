@@ -269,7 +269,9 @@ export function erstellen(canvas, stufe){
     else if (s.warm === 4){ R.setPixelRatio(1); R.setSize(8, 8, false); R.render(s.S, kamera); }   // Probebild: Schattenbild und Puffer einmal anlegen
     else if (voll){ fuer(s.S, 16, 16, 1); for (const w of s.wasser) w.wa.visible = true; for (const e of s.einfach) e.visible = false; komp.render(); } }   // volle Stufe: Nachbearbeitung und Spiegelung einmal
   function frei(){ for (const s of szenen.values()) s.frei(); szenen.clear(); if (komp) komp.dispose(); R.dispose(); }
-  return Object.assign(api, { szene, bild, frei, vorwaermen, hat:id => szenen.has(id), warm:id => (szenen.get(id) || {}).warm >= (voll ? 5 : 4) && !szenen.get(id).wartet });
+  /** Alles freigeben und den Grafik-Kontext sofort abgeben (Safari erlaubt nur wenige gleichzeitig). */
+  function weg(){ api.ok = false; try { frei(); } catch (_){} try { const x = gl.getExtension('WEBGL_lose_context'); if (x) x.loseContext(); } catch (_){} canvas.width = 0; canvas.height = 0; }
+  return Object.assign(api, { szene, bild, frei, weg, vorwaermen, hat:id => szenen.has(id), warm:id => (szenen.get(id) || {}).warm >= (voll ? 5 : 4) && !szenen.get(id).wartet });
 }
 
 /** Mehrere Formen zu einer (gleiche Attribute: Position, Normale, UV). */
