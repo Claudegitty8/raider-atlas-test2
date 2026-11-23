@@ -5,7 +5,7 @@
    Etappe 6: Funde P3 (Browser-Zwischenspeicher), C20 (Fehlerseiten), S4 (toter Zweig), Cache-Nummer automatisch. */
 'use strict';
 const PRAEFIX = 'raider-atlas-neu:';
-const CACHE = PRAEFIX + '5b0a036d033c';
+const CACHE = PRAEFIX + '05c352b9ba4f';
 const DATEIEN = ['./', 'manifest.webmanifest', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -44,5 +44,7 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const u = new URL(req.url);
+  // three.js (feste Version im Pfad): zuerst aus dem Speicher, sonst laden und merken (Entscheid E-81, offline nach dem ersten Öffnen)
+  if (u.origin === self.location.origin && u.pathname.includes('/three-r187/')){ e.respondWith(caches.match(req).then(r => r || fetch(req).then(res => merken(req, res)))); return; }
   if (u.origin === self.location.origin) e.respondWith(netzZuerst(req));   // fremde Adressen fasst der Service Worker nicht an
 });
