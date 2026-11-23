@@ -5,7 +5,7 @@
    Etappe 6: Funde P3 (Browser-Zwischenspeicher), C20 (Fehlerseiten), S4 (toter Zweig), Cache-Nummer automatisch. */
 'use strict';
 const PRAEFIX = 'raider-atlas-neu:';
-const CACHE = PRAEFIX + '9bdd210dd559';
+const CACHE = PRAEFIX + 'a3a50c07755f';
 const DATEIEN = ['./', 'manifest.webmanifest', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
